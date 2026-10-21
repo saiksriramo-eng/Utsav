@@ -5,7 +5,7 @@ export function buildVendorWhatsAppMessage(
   vendor: VendorItem
 ): string {
   const greeting = `Namaste! Reaching out regarding the upcoming ${intake.eventName} (${intake.category} - ${intake.subEvent}).`;
-  const specs = `\n📅 Date: ${intake.eventDate}\n📍 Location: ${intake.city} (${intake.venueType})\n👥 Expected Guests: ~${intake.guestCount}\n💰 Target Allocation Range: ${vendor.estimatedPriceRangeINR}`;
+  const specs = `\nDate: ${intake.eventDate}\nLocation: ${intake.city} (${intake.venueType})\nExpected Guests: ~${intake.guestCount}\nTarget Allocation Range: ${vendor.estimatedPriceRangeINR}`;
   const body = `\n\n${vendor.whatsappInquiryTemplate}`;
   const questions =
     vendor.vettingQuestions.length > 0

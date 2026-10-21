@@ -5,8 +5,7 @@ import {
   Clock,
   MapPin,
   Sparkles,
-  AlertCircle,
-  RotateCcw
+  AlertCircle
 } from 'lucide-react';
 import {
   UtsavEventState,
@@ -20,7 +19,6 @@ import {
 import { REGIONAL_VIBES } from './constants/regionalVibes';
 import { Header } from './components/Header';
 import { OnboardingIntake } from './components/OnboardingIntake';
-import { PeaceOfMindBanner } from './components/PeaceOfMindBanner';
 import { BudgetEngine } from './components/BudgetEngine';
 import { FeastAndThemeStudio } from './components/FeastAndThemeStudio';
 import { TimelineRunSheet } from './components/TimelineRunSheet';
@@ -35,7 +33,24 @@ export const App: React.FC = () => {
   const [eventState, setEventState] = useState<UtsavEventState | null>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? JSON.parse(saved) : null;
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed?.intake?.eventName?.includes('Aarav') || parsed?.intake?.eventName?.includes('Meera')) {
+          parsed.intake.eventName = 'Royal Heritage Wedding Celebration';
+        }
+        if (Array.isArray(parsed?.sahayakHistory)) {
+          parsed.sahayakHistory = parsed.sahayakHistory.map((m: any) => ({
+            ...m,
+            text: m.text
+              .replace(/^Dear\s+host,?\s*(?:your\s+)?(?:Aarav\s*&\s*Meera\s*[\w\s]*\s+is\s+)?/i, '')
+              .replace(/Dear host,?\s*/gi, '')
+              .replace(/Aarav & Meera Sangeet Utsav/gi, 'Royal Heritage Celebration')
+              .replace(/Aarav & Meera/gi, 'Celebration')
+          }));
+        }
+        return parsed;
+      }
+      return null;
     } catch {
       return null;
     }
@@ -214,9 +229,14 @@ export const App: React.FC = () => {
     }
   };
 
-  // Sahayak 4 Calm Quick-Action Chips
+  // Sahayak Calm Quick-Action Chips
   const handleQuickAction = async (
-    actionKey: 'welcome_guests_25' | 'budget_cosy_15' | 'adapt_indoor' | 'cycle_regional_vibe'
+    actionKey:
+      | 'welcome_guests_25'
+      | 'budget_cosy_15'
+      | 'adapt_indoor'
+      | 'cycle_regional_vibe'
+      | 'add_budget_50k'
   ) => {
     if (!eventState || isRebalancing) return;
 
@@ -227,7 +247,13 @@ export const App: React.FC = () => {
       let prompt = '';
       let overrides: Partial<EventIntake> = {};
 
-      if (actionKey === 'welcome_guests_25') {
+      if (actionKey === 'add_budget_50k') {
+        const nextBudget = eventState.intake.totalBudgetINR + 50000;
+        prompt = `Increase the total budget by +₹50,000 (new total: ₹${nextBudget}). Scale the comfort cushion to ₹${Math.round(
+          nextBudget * 0.1
+        )} and adjust unlocked categories gracefully.`;
+        overrides = { totalBudgetINR: nextBudget };
+      } else if (actionKey === 'welcome_guests_25') {
         const nextGuests = eventState.intake.guestCount + 25;
         prompt = `Welcome +25 more guests (total: ${nextGuests}) within the existing total budget of ₹${eventState.intake.totalBudgetINR}. Hold locked categories constant and scale plate counts.`;
         overrides = { guestCount: nextGuests };
@@ -257,7 +283,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col pb-36">
+    <div className="min-h-screen flex flex-col pb-12">
       {/* Brand Header */}
       <Header state={eventState} onReset={handleReset} />
 
@@ -286,20 +312,17 @@ export const App: React.FC = () => {
         ) : (
           /* STEP B: 4-Pillar Synchronized Command Center */
           <div className="space-y-6 animate-fade-in">
-            {/* Top Proactive Peace-of-Mind Shield Banner */}
-            <PeaceOfMindBanner peaceOfMind={eventState.peaceOfMind} intake={eventState.intake} />
-
             {/* 4-Pillar Navigation Tabs */}
-            <div className="flex items-center justify-between border-b border-amber-200/80 pb-3">
-              <nav aria-label="4-Pillar Workspace Navigation" className="flex items-center gap-2 sm:gap-4 overflow-x-auto scrollbar-none">
+            <div className="flex items-center justify-between border-b border-orange-200/80 pb-3">
+              <nav aria-label="Workspace Navigation" className="flex items-center gap-2 sm:gap-3 overflow-x-auto scrollbar-none">
                 <button
                   type="button"
                   id="tab-pillar-budget"
                   onClick={() => setActiveTab('budget')}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition ${
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-xs sm:text-sm transition ${
                     activeTab === 'budget'
-                      ? 'bg-amber-600 text-white shadow-warm-md'
-                      : 'text-stone-600 hover:text-stone-900 hover:bg-white/80'
+                      ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-warm-md'
+                      : 'text-stone-600 hover:text-stone-900 hover:bg-orange-50/60'
                   }`}
                 >
                   <Wallet className="w-4 h-4" />
@@ -310,10 +333,10 @@ export const App: React.FC = () => {
                   type="button"
                   id="tab-pillar-feast"
                   onClick={() => setActiveTab('feast-theme')}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition ${
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-xs sm:text-sm transition ${
                     activeTab === 'feast-theme'
-                      ? 'bg-amber-600 text-white shadow-warm-md'
-                      : 'text-stone-600 hover:text-stone-900 hover:bg-white/80'
+                      ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-warm-md'
+                      : 'text-stone-600 hover:text-stone-900 hover:bg-orange-50/60'
                   }`}
                 >
                   <Utensils className="w-4 h-4" />
@@ -324,10 +347,10 @@ export const App: React.FC = () => {
                   type="button"
                   id="tab-pillar-timeline"
                   onClick={() => setActiveTab('timeline')}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition ${
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-xs sm:text-sm transition ${
                     activeTab === 'timeline'
-                      ? 'bg-amber-600 text-white shadow-warm-md'
-                      : 'text-stone-600 hover:text-stone-900 hover:bg-white/80'
+                      ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-warm-md'
+                      : 'text-stone-600 hover:text-stone-900 hover:bg-orange-50/60'
                   }`}
                 >
                   <Clock className="w-4 h-4" />
@@ -338,21 +361,16 @@ export const App: React.FC = () => {
                   type="button"
                   id="tab-pillar-vendors"
                   onClick={() => setActiveTab('vendors')}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition ${
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-xs sm:text-sm transition ${
                     activeTab === 'vendors'
-                      ? 'bg-amber-600 text-white shadow-warm-md'
-                      : 'text-stone-600 hover:text-stone-900 hover:bg-white/80'
+                      ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-warm-md'
+                      : 'text-stone-600 hover:text-stone-900 hover:bg-orange-50/60'
                   }`}
                 >
                   <MapPin className="w-4 h-4" />
                   <span>4. Local Vendor Radar</span>
                 </button>
               </nav>
-
-              <div className="hidden md:flex items-center gap-1.5 text-xs text-stone-500 font-semibold">
-                <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                <span>Synchronized JSON State Tree</span>
-              </div>
             </div>
 
             {/* Active Pillar Views */}
@@ -395,13 +413,14 @@ export const App: React.FC = () => {
               )}
             </div>
 
-            {/* Floating Utsav Sahayak Dock */}
+            {/* Floating Utsav Sahayak Chatbot */}
             <UtsavSahayakBar
               history={eventState.sahayakHistory}
               lastSummary={eventState.lastSahayakSummary}
               isRebalancing={isRebalancing}
               onSendMessage={handleSahayakMessage}
               onQuickAction={handleQuickAction}
+              intake={eventState.intake}
             />
           </div>
         )}

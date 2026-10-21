@@ -14,7 +14,11 @@ import {
   Building,
   TreePine,
   Sun,
-  ShieldAlert
+  ShieldAlert,
+  Heart,
+  Cake,
+  PartyPopper,
+  Check
 } from 'lucide-react';
 import { EventIntake, EventCategory, RegionalVibeId } from '../types/utsav';
 import {
@@ -36,7 +40,7 @@ export const OnboardingIntake: React.FC<OnboardingIntakeProps> = ({
 
   // Form state initialized with sensible defaults
   const [formData, setFormData] = useState<EventIntake>({
-    eventName: 'Meera & Aarav Sangeet Night',
+    eventName: 'Royal Heritage Wedding Sangeet',
     category: 'Wedding',
     subEvent: 'Sangeet & Ring Ceremony',
     city: 'Jaipur',
@@ -180,8 +184,8 @@ export const OnboardingIntake: React.FC<OnboardingIntakeProps> = ({
                   id="input-event-name"
                   value={formData.eventName}
                   onChange={(e) => setFormData({ ...formData, eventName: e.target.value })}
-                  placeholder="e.g., Aarav & Meera Sangeet Utsav"
-                  className="w-full px-4 py-3 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 text-stone-800 font-medium text-sm"
+                  placeholder="e.g., Grand Wedding Celebration, Golden Jubilee, Birthday Festivity"
+                  className="w-full px-4 py-3 rounded-full border border-stone-200 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 text-stone-800 font-medium text-sm"
                   required
                 />
               </div>
@@ -203,16 +207,22 @@ export const OnboardingIntake: React.FC<OnboardingIntakeProps> = ({
                           subEvent: subEventOptions[cat][0]
                         })
                       }
-                      className={`p-4 rounded-2xl border text-center font-bold text-sm transition ${
+                      className={`p-4 rounded-2xl border text-center font-bold text-sm transition flex flex-col items-center justify-center gap-1.5 ${
                         formData.category === cat
-                          ? 'bg-amber-500 text-white border-amber-600 shadow-warm-md scale-[1.02]'
+                          ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white border-orange-600 shadow-warm-md scale-[1.02]'
                           : 'bg-stone-50 hover:bg-stone-100 text-stone-700 border-stone-200'
                       }`}
                     >
-                      <div className="text-2xl mb-1">
-                        {cat === 'Wedding' ? '💍' : cat === 'Birthday' ? '🎂' : '🎪'}
+                      <div className="mb-0.5">
+                        {cat === 'Wedding' ? (
+                          <Heart className="w-6 h-6 mx-auto" />
+                        ) : cat === 'Birthday' ? (
+                          <Cake className="w-6 h-6 mx-auto" />
+                        ) : (
+                          <PartyPopper className="w-6 h-6 mx-auto" />
+                        )}
                       </div>
-                      {cat}
+                      <span>{cat}</span>
                     </button>
                   ))}
                 </div>
@@ -546,13 +556,13 @@ export const OnboardingIntake: React.FC<OnboardingIntakeProps> = ({
                         key={tag}
                         type="button"
                         onClick={() => toggleAestheticTag(tag)}
-                        className={`px-3 py-1.5 rounded-xl border text-xs font-semibold transition ${
+                        className={`inline-flex items-center px-4 py-2 rounded-full border text-xs font-semibold transition ${
                           isSelected
-                            ? 'bg-amber-100 text-amber-950 border-amber-400 shadow-sm'
+                            ? 'bg-orange-100 text-orange-950 border-orange-400 shadow-sm'
                             : 'bg-stone-50 hover:bg-stone-100 text-stone-600 border-stone-200'
                         }`}
                       >
-                        {isSelected ? '✓ ' : '+ '}
+                        {isSelected ? <Check className="w-3.5 h-3.5 mr-1 text-orange-600" /> : <span className="mr-1">+</span>}
                         {tag}
                       </button>
                     );
@@ -569,7 +579,7 @@ export const OnboardingIntake: React.FC<OnboardingIntakeProps> = ({
                 type="button"
                 id="btn-intake-prev"
                 onClick={() => setCurrentStep((prev) => prev - 1)}
-                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 font-semibold text-xs transition"
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 font-semibold text-xs transition"
               >
                 <ChevronLeft className="w-4 h-4" />
                 Previous Step
@@ -583,7 +593,7 @@ export const OnboardingIntake: React.FC<OnboardingIntakeProps> = ({
                 type="button"
                 id="btn-intake-next"
                 onClick={() => setCurrentStep((prev) => prev + 1)}
-                className="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs transition shadow-warm-sm"
+                className="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold text-xs transition shadow-warm-sm"
               >
                 Continue
                 <ChevronRight className="w-4 h-4" />
@@ -593,16 +603,16 @@ export const OnboardingIntake: React.FC<OnboardingIntakeProps> = ({
                 type="submit"
                 id="btn-craft-masterplan"
                 disabled={isLoading}
-                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-amber-600 via-rose-600 to-amber-700 hover:from-amber-700 hover:to-rose-700 text-white font-extrabold text-sm transition shadow-warm-lg active:scale-95 disabled:opacity-50"
+                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 hover:from-orange-600 hover:to-amber-600 text-white font-extrabold text-sm transition shadow-warm-lg active:scale-95 disabled:opacity-50"
               >
                 {isLoading ? (
                   <>
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    <span>Synthesizing Masterplan with Gemini 2.5...</span>
+                    <span>Crafting Celebration Masterplan...</span>
                   </>
                 ) : (
                   <>
-                    <Sparkles className="w-4 h-4 text-amber-200" />
+                    <Sparkles className="w-4 h-4 text-orange-100" />
                     <span>Craft Celebration Masterplan</span>
                   </>
                 )}

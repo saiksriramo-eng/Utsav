@@ -14,7 +14,7 @@ export const REGIONAL_VIBES: Record<RegionalVibeId, RegionalVibeMeta> = {
     id: 'southern_sambar',
     title: 'Southern Sambar & Sadhya',
     tagline: 'Aromatic Ghee Roast counters, banana-leaf warmth & brass-davara filter coffee.',
-    badgeEmoji: '🥥',
+    badgeEmoji: 'South Indian',
     signatureDishes: [
       'Mini Podi Idli & Medu Vada Live Station',
       'Malabar Appam & Vegetable Stew',
@@ -27,7 +27,7 @@ export const REGIONAL_VIBES: Record<RegionalVibeId, RegionalVibeMeta> = {
     id: 'northern_naan',
     title: 'Northern Naan & Nawabi',
     tagline: 'Old-Delhi chaat carts, smoky tandoori kulchas, rich curries & kesar kulfi.',
-    badgeEmoji: '🫓',
+    badgeEmoji: 'North Indian',
     signatureDishes: [
       'Crispy Palak Patta Chaat & Golgappa Water Bar',
       'Amritsari Stuffed Kulcha & Bhatti Paneer',
@@ -40,7 +40,7 @@ export const REGIONAL_VIBES: Record<RegionalVibeId, RegionalVibeMeta> = {
     id: 'deccan_nizami',
     title: 'Deccan & Royal Nizami',
     tagline: 'Fragrant Dum Biryani handis, royal salans, Double ka Meetha & Irani chai.',
-    badgeEmoji: '🌶️',
+    badgeEmoji: 'Deccan & Mughlai',
     signatureDishes: [
       'Charcoal-Grilled Subz & Paneer Shikampuri Kebabs',
       'Zafrani Dum Biryani Sealed in Clay Handis',
@@ -53,7 +53,7 @@ export const REGIONAL_VIBES: Record<RegionalVibeId, RegionalVibeMeta> = {
     id: 'global_fusion',
     title: 'Global Fusion & Street',
     tagline: 'Wood-fired pizzas, gourmet sliders, pasta wheels & artisanal mocktail bars.',
-    badgeEmoji: '🍕',
+    badgeEmoji: 'Global & Fusion',
     signatureDishes: [
       'Wood-Fired Neapolitan Pizza & Garlic Knots',
       'Loaded Mexican Taco & Nacho Salsa Station',
@@ -78,17 +78,17 @@ export const MAP_CATEGORIES: Array<{
   queryTerm: string;
   serviceCategory: 'Caterers' | 'Decorators' | 'Photographers' | 'Venues';
 }> = [
-  { label: '🍽️ Caterers', queryTerm: 'catering services', serviceCategory: 'Caterers' },
-  { label: '🌸 Decorators', queryTerm: 'event decorators', serviceCategory: 'Decorators' },
-  { label: '📸 Photographers', queryTerm: 'event wedding photographers', serviceCategory: 'Photographers' },
-  { label: '🏛️ Venues & Halls', queryTerm: 'banquet halls event venues', serviceCategory: 'Venues' }
+  { label: 'Caterers', queryTerm: 'catering services', serviceCategory: 'Caterers' },
+  { label: 'Decorators', queryTerm: 'event decorators', serviceCategory: 'Decorators' },
+  { label: 'Photographers', queryTerm: 'event wedding photographers', serviceCategory: 'Photographers' },
+  { label: 'Venues & Halls', queryTerm: 'banquet halls event venues', serviceCategory: 'Venues' }
 ];
 
 export const DEMO_PRESETS: Array<{ label: string; intake: EventIntake }> = [
   {
-    label: '💍 Royal Jaipur Sangeet (150 Guests • ₹8L)',
+    label: 'Heritage Jaipur Sangeet (150 Guests - ₹8L)',
     intake: {
-      eventName: 'Aarav & Meera Sangeet Utsav',
+      eventName: 'Royal Heritage Wedding Sangeet',
       category: 'Wedding',
       subEvent: 'Sangeet & Ring Ceremony',
       city: 'Jaipur',
@@ -102,9 +102,9 @@ export const DEMO_PRESETS: Array<{ label: string; intake: EventIntake }> = [
     }
   },
   {
-    label: '🎂 1st Birthday Soiree (80 Guests • ₹65K)',
+    label: '1st Birthday Soiree (80 Guests - ₹65K)',
     intake: {
-      eventName: 'Vihaan Turning One Celebration',
+      eventName: 'Vihaan Milestone Celebration',
       category: 'Birthday',
       subEvent: '1st Milestone Birthday',
       city: 'Bengaluru',
@@ -118,7 +118,7 @@ export const DEMO_PRESETS: Array<{ label: string; intake: EventIntake }> = [
     }
   },
   {
-    label: '🎪 Campus Tech & Cultural Fest (350 Guests • ₹2.5L)',
+    label: 'Campus Cultural Fest (350 Guests - ₹2.5L)',
     intake: {
       eventName: 'Ignite Annual Campus Utsav',
       category: 'Community',

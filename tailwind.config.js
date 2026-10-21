@@ -71,8 +71,9 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        serif: ['Playfair Display', 'Merriweather', 'serif'],
+        sans: ['Quicksand', 'sans-serif'],
+        serif: ['Quicksand', 'sans-serif'],
+        festive: ['Quicksand', 'sans-serif'],
       },
       boxShadow: {
         'warm-sm': '0 1px 3px rgba(180, 83, 9, 0.08), 0 1px 2px rgba(180, 83, 9, 0.04)',

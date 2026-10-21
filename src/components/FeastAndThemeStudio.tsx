@@ -294,7 +294,7 @@ export const FeastAndThemeStudio: React.FC<FeastAndThemeStudioProps> = ({
                     <ul className="space-y-1.5 text-xs text-stone-700">
                       {theme.engagementActivities.map((act, aIdx) => (
                         <li key={aIdx} className="flex items-start gap-1.5">
-                          <span className="text-rose-500 font-bold">★</span>
+                          <Sparkles className="w-3.5 h-3.5 text-orange-500 shrink-0 mt-0.5" />
                           <span>{act}</span>
                         </li>
                       ))}
