@@ -7,100 +7,52 @@ export default {
   theme: {
     extend: {
       colors: {
-        marigold: {
-          50: '#fffbeb',
-          100: '#fef3c7',
-          200: '#fde68a',
-          300: '#fcd34d',
-          400: '#fbbf24',
-          500: '#f59e0b',
-          600: '#d97706',
-          700: '#b45309',
-          800: '#92400e',
-          900: '#78350f',
-          950: '#451a03',
+        cream: {
+          50: '#FAF7F4',
+          100: '#F5EFEA', // Main warm cream
+          200: '#EFE7E0',
+          300: '#E4D8CE',
         },
-        kumkum: {
-          50: '#fff1f2',
-          100: '#ffe4e6',
-          200: '#fecdd3',
-          300: '#fda4af',
-          400: '#fb7185',
-          500: '#f43f5e',
-          600: '#e11d48',
-          700: '#be123c',
-          800: '#9f1239',
-          900: '#881337',
-          950: '#4c0519',
+        slateNavy: '#2C3844',
+        sageTeal: {
+          DEFAULT: '#4A7B76',
+          dark: '#3B6460',
+          light: '#619691',
+          50: '#F0F6F5',
         },
-        'emerald-calm': {
-          50: '#ecfdf5',
-          100: '#d1fae5',
-          200: '#a7f3d0',
-          300: '#6ee7b7',
-          400: '#34d399',
-          500: '#10b981',
-          600: '#059669',
-          700: '#047857',
-          800: '#065f46',
-          900: '#064e3b',
-          950: '#022c22',
+        terracotta: {
+          DEFAULT: '#D96B52',
+          dark: '#C2573F',
+          light: '#E2846E',
+          50: '#FDF5F3',
         },
-        'ivory-warm': {
-          50: '#fdfbf7',
-          100: '#faf6ee',
-          200: '#f5ecdc',
-          300: '#eddcc1',
-          400: '#e2c69f',
-          500: '#d7af80',
-          600: '#c59564',
-          700: '#a4764f',
-          800: '#855f42',
-          900: '#6d4e38',
-          950: '#3b281c',
+        coralAccent: '#DE7356', // User-specified nested surface / accent
+        goldenOchre: {
+          DEFAULT: '#E59852',
+          dark: '#D08139',
+          light: '#ECAC73',
+          50: '#FEF8F2',
         },
-        festive: {
-          gold: '#D97706',
-          crimson: '#BE123C',
-          sindoor: '#E11D48',
-          emerald: '#047857',
-          saffron: '#EA580C',
-          turmeric: '#F59E0B',
-          sandstone: '#FDFBF7',
-          charcoal: '#1C1917',
-        }
+        charcoal: {
+          DEFAULT: '#1E262D',
+          muted: '#7A8288',
+          light: '#A0A7AD',
+        },
       },
       fontFamily: {
-        sans: ['Quicksand', 'sans-serif'],
-        serif: ['Quicksand', 'sans-serif'],
-        festive: ['Quicksand', 'sans-serif'],
+        display: ['"Cormorant Garamond"', 'serif'],
+        serif: ['"Cormorant Garamond"', 'serif'],
+        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+      },
+      borderRadius: {
+        'card': '22px',
+        'subcard': '14px',
       },
       boxShadow: {
-        'warm-sm': '0 1px 3px rgba(180, 83, 9, 0.08), 0 1px 2px rgba(180, 83, 9, 0.04)',
-        'warm-md': '0 4px 6px -1px rgba(180, 83, 9, 0.1), 0 2px 4px -1px rgba(180, 83, 9, 0.06)',
-        'warm-lg': '0 10px 15px -3px rgba(180, 83, 9, 0.12), 0 4px 6px -2px rgba(180, 83, 9, 0.08)',
-        'warm-xl': '0 20px 25px -5px rgba(180, 83, 9, 0.15), 0 10px 10px -5px rgba(180, 83, 9, 0.05)',
-        'emerald-glow': '0 0 25px rgba(16, 185, 129, 0.25)',
+        'ambient': '0 4px 16px rgba(0, 0, 0, 0.04)',
+        'ambient-sm': '0 2px 8px rgba(0, 0, 0, 0.03)',
+        'ambient-md': '0 6px 20px rgba(0, 0, 0, 0.06)',
       },
-      animation: {
-        'fade-in': 'fadeIn 0.3s ease-out forwards',
-        'slide-up': 'slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-        'pulse-subtle': 'pulseSubtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-      },
-      keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
-        slideUp: {
-          '0%': { opacity: '0', transform: 'translateY(12px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-        pulseSubtle: {
-          '0%, 100%': { opacity: '1' },
-          '50%': { opacity: '0.85' },
-        }
-      }
     },
   },
   plugins: [],

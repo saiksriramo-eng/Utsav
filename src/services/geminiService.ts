@@ -12,7 +12,7 @@ import {
 import { REGIONAL_VIBES } from '../constants/regionalVibes';
 
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
-const hasValidKey = apiKey.trim().length > 0 && !apiKey.includes('your_gemini_api_key');
+const hasValidKey = apiKey.trim().length > 0 && !apiKey.includes('placeholder');
 const ai = new GoogleGenAI({ apiKey: hasValidKey ? apiKey : 'placeholder_key' });
 
 const MODEL_NAME = 'gemini-2.5-flash';
@@ -317,8 +317,8 @@ export function detectIntakeAdjustmentsFromText(
   const isBudgetExplicit =
     /\b(?:budget|price|inr|rs\.?|rupees?|lakhs?|lac|crores?|cr|cost|spend)\b/i.test(text) ||
     text.includes('₹') ||
-    text.includes('(+' ) ||
-    text.includes('(-' );
+    text.includes('(+') ||
+    text.includes('(-');
 
   if (isBudgetExplicit) {
     // Budget addition
