@@ -12,7 +12,13 @@ import {
   Lock
 } from 'lucide-react';
 import { UtsavAIIcon } from './icons/UtsavAIIcon';
+import { DiyaIcon } from './icons/DiyaIcon';
 import { generateAvatarSvg, generateHeroPlaceholder } from '../utils/avatarHelper';
+import {
+  isSupabaseConfigured,
+  signInWithSupabase,
+  signUpWithSupabase
+} from '../services/supabaseClient';
 
 export interface AuthUser {
   name: string;
@@ -29,14 +35,21 @@ interface LoginPageProps {
 export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [role, setRole] = useState('Event Host / Couple');
   const [eventCode, setEventCode] = useState('WED-2024-JUL');
   const [rememberMe, setRememberMe] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const hasSupabase = isSupabaseConfigured();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
+    setAuthError(null);
 
+    const userEmail = email.trim() || `${name.toLowerCase().replace(/\s+/g, '.')}@utsav.app`;
     const initials = name
       .split(' ')
       .map((n) => n[0])
@@ -44,16 +57,41 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
       .slice(0, 2)
       .toUpperCase() || 'U';
 
+    const avatar =
+      role.includes('Host') || role.includes('Couple')
+        ? generateAvatarSvg(initials, '#D96B52')
+        : role.includes('Planner')
+        ? generateAvatarSvg(initials, '#4A7B76')
+        : generateAvatarSvg(initials, '#2C3844');
+
+    // If Supabase is connected and password is provided, attempt Supabase Auth
+    if (hasSupabase && password.trim()) {
+      setIsSubmitting(true);
+      try {
+        // Try sign in first, or sign up if user doesn't exist
+        try {
+          await signInWithSupabase(userEmail, password);
+        } catch {
+          await signUpWithSupabase(userEmail, password, {
+            name: name.trim(),
+            role,
+            eventCode: eventCode.trim(),
+          });
+        }
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : 'Authentication failed';
+        setAuthError(message);
+        setIsSubmitting(false);
+        return;
+      }
+      setIsSubmitting(false);
+    }
+
     const user: AuthUser = {
       name: name.trim(),
-      email: email.trim() || `${name.toLowerCase().replace(/\s+/g, '.')}@utsav.app`,
+      email: userEmail,
       role,
-      avatar:
-        role.includes('Host') || role.includes('Couple')
-          ? generateAvatarSvg(initials, '#D96B52')
-          : role.includes('Planner')
-          ? generateAvatarSvg(initials, '#4A7B76')
-          : generateAvatarSvg(initials, '#2C3844'),
+      avatar,
       eventCode: eventCode.trim() || 'WED-2024-JUL',
     };
 
@@ -103,8 +141,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
 
           {/* Top Brand Logo */}
           <div className="relative z-10 flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-full bg-sageTeal text-white flex items-center justify-center shadow-ambient-sm">
-              <UtsavAIIcon className="w-5 h-5 text-white" />
+            <div className="w-10 h-10 rounded-full bg-terracotta text-white flex items-center justify-center shadow-ambient-sm">
+              <DiyaIcon className="w-6 h-6 text-white" />
             </div>
             <div>
               <span className="font-display text-[22px] font-semibold tracking-wide text-white">
@@ -146,8 +184,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
           <div>
             {/* Mobile Header Brand (Visible on mobile only) */}
             <div className="lg:hidden flex items-center gap-2.5 mb-6">
-              <div className="w-10 h-10 rounded-full bg-sageTeal text-white flex items-center justify-center shadow-ambient-sm">
-                <UtsavAIIcon className="w-5 h-5 text-white" />
+              <div className="w-10 h-10 rounded-full bg-terracotta text-white flex items-center justify-center shadow-ambient-sm">
+                <DiyaIcon className="w-6 h-6 text-white" />
               </div>
               <div>
                 <h1 className="font-display text-[22px] font-semibold text-charcoal">
@@ -161,9 +199,21 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
 
             {/* Form Title */}
             <div className="mb-6">
-              <span className="text-[11px] font-semibold text-sageTeal uppercase tracking-wider">
-                User Authentication
-              </span>
+              <div className="flex items-center justify-between gap-2 mb-1">
+                <span className="text-[11px] font-semibold text-sageTeal uppercase tracking-wider">
+                  User Authentication
+                </span>
+                {hasSupabase ? (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-semibold border border-emerald-200">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    Supabase Cloud Connected
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-cream-100 text-charcoal-muted text-[10px] font-medium border border-black/[0.05]" title="Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env to connect Supabase">
+                    Local Auth Mode
+                  </span>
+                )}
+              </div>
               <h2 className="font-display font-semibold text-[26px] sm:text-[30px] text-charcoal mt-0.5 leading-tight">
                 Enter Event Workspace
               </h2>
@@ -230,6 +280,11 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
 
             {/* Main Intake Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
+              {authError && (
+                <div className="p-3 rounded-subcard bg-red-50 border border-red-200 text-red-700 text-[12px] flex items-center gap-2">
+                  <span>{authError}</span>
+                </div>
+              )}
               <div>
                 <label className="block text-[12px] font-semibold text-charcoal mb-1">
                   Full Name / Host Name
@@ -266,6 +321,24 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
 
                 <div>
                   <label className="block text-[12px] font-semibold text-charcoal mb-1">
+                    {hasSupabase ? 'Account Password' : 'Password (Optional)'}
+                  </label>
+                  <div className="relative">
+                    <Lock className="w-4 h-4 text-charcoal-muted absolute left-3.5 top-3" />
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder={hasSupabase ? '••••••••' : 'Optional passkey'}
+                      className="w-full bg-cream-50/70 border border-black/[0.08] rounded-subcard pl-10 pr-4 py-2.5 text-[13px] text-charcoal placeholder:text-charcoal-muted focus:outline-none focus:ring-1 focus:ring-sageTeal transition-all"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[12px] font-semibold text-charcoal mb-1">
                     Role in Event
                   </label>
                   <select
@@ -280,21 +353,21 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                     <option value="Family Member / Guest">Family Member / Guest</option>
                   </select>
                 </div>
-              </div>
 
-              <div>
-                <label className="block text-[12px] font-semibold text-charcoal mb-1">
-                  Event Access Passkey / Code
-                </label>
-                <div className="relative">
-                  <KeyRound className="w-4 h-4 text-charcoal-muted absolute left-3.5 top-3" />
-                  <input
-                    type="text"
-                    value={eventCode}
-                    onChange={(e) => setEventCode(e.target.value)}
-                    placeholder="WED-2024-JUL"
-                    className="w-full bg-cream-50/70 border border-black/[0.08] rounded-subcard pl-10 pr-4 py-2.5 text-[13px] text-charcoal placeholder:text-charcoal-muted focus:outline-none focus:ring-1 focus:ring-sageTeal transition-all"
-                  />
+                <div>
+                  <label className="block text-[12px] font-semibold text-charcoal mb-1">
+                    Event Access Passkey / Code
+                  </label>
+                  <div className="relative">
+                    <KeyRound className="w-4 h-4 text-charcoal-muted absolute left-3.5 top-3" />
+                    <input
+                      type="text"
+                      value={eventCode}
+                      onChange={(e) => setEventCode(e.target.value)}
+                      placeholder="WED-2024-JUL"
+                      className="w-full bg-cream-50/70 border border-black/[0.08] rounded-subcard pl-10 pr-4 py-2.5 text-[13px] text-charcoal placeholder:text-charcoal-muted focus:outline-none focus:ring-1 focus:ring-sageTeal transition-all"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -317,10 +390,20 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full py-3.5 rounded-full bg-sageTeal text-white font-semibold text-[14px] flex items-center justify-center gap-2 hover:bg-sageTeal-dark transition-all shadow-ambient hover:shadow-ambient-md"
+                  disabled={isSubmitting}
+                  className="w-full py-3.5 rounded-full bg-sageTeal text-white font-semibold text-[14px] flex items-center justify-center gap-2 hover:bg-sageTeal-dark transition-all shadow-ambient hover:shadow-ambient-md disabled:opacity-60"
                 >
-                  <span>Enter Event Command Center</span>
-                  <ArrowRight className="w-4 h-4" />
+                  {isSubmitting ? (
+                    <span className="inline-flex items-center gap-2">
+                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Authenticating with Cloud...
+                    </span>
+                  ) : (
+                    <>
+                      <span>Enter Event Command Center</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
                 </button>
               </div>
             </form>
